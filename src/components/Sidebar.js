@@ -45,14 +45,6 @@ class SiderDemo extends React.Component {
                 Mobile
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="4">
-              <NavLink
-                to={routes.resources.devices}
-                className="normal"
-                activeClassName="active">
-                Devices
-              </NavLink>
-            </Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" title="Team">
             <Menu.Item key="6">Team 1</Menu.Item>

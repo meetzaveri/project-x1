@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
-import {Card, Col, Row} from 'antd';
-import Item from '../../../node_modules/antd/lib/list/Item';
+import {
+  Card,
+  Col,
+  Row,
+  Spin,
+  Button,
+  Icon
+} from 'antd';
 
-const CardComponentForAndroid = (props) => {
-  const arr = props.state.resources;
+const CardComponentForIphone = (props) => {
+  const arr = props.resources;
   const card = arr.map((Item, index) => (
     <Col
       key={index}
@@ -18,21 +24,27 @@ const CardComponentForAndroid = (props) => {
   return (card)
 }
 
-const CardComponentForIphone = (props) => {
+const CustomExtraContent = (props) => (
+  <div>
+    <h3>{props.title}
+    </h3>
+    <Button type="primary" onClick={props.onHandleEditForAndroid}>
+      <Icon type="edit"></Icon>
+    </Button>
+  </div>
+);
+
+const CardComponentForAndroid = (props) => {
   const arr = props.resources;
-  console.log('Resources', arr);
+  const onLoadingForAndroid = props.onLoadingForAndroid;
+
+  console.log('Resources', arr, onLoadingForAndroid);
   let card = null;
-  if (arr.length === 0) {
-    card = () => (
-      <Col
-        key={1}
-        span={8}
-        style={{
-        paddingLeft: '8px',
-        paddingRight: '8px'
-      }}>
-        <Card title="Card title" bordered={false}>Card content</Card>
-      </Col>
+  if (onLoadingForAndroid) {
+    return (
+      <div>
+        <Spin/>
+      </div>
     )
   } else {
     card = arr.map((item, index) => (
@@ -43,11 +55,27 @@ const CardComponentForIphone = (props) => {
         paddingLeft: '8px',
         paddingRight: '8px'
       }}>
-        <Card title={item.deviceInfo} bordered={false}>{item.description}</Card>
+        <Card
+          title={item.deviceInfo}
+          extra={< CustomExtraContent title = {
+          item.title
+        }
+        onHandleEditForAndroid = {
+          props.actions.onHandleEditForAndroid
+        } />}
+          bordered={false}>
+          <Row>Status - {item.status}</Row>
+          <Row>
+            TeamName - {item.teamName}
+          </Row>
+          <Row>{item.description}</Row>
+          <Row>Timeslot - {item.timeSlot}
+          </Row>
+        </Card>
       </Col>
     ));
+    return (card)
   }
-  return (card)
 }
 
 const Content = (props) => {
@@ -88,7 +116,6 @@ const Content = (props) => {
       </div>
     );
   }
-
 }
 
-export default Content;
+export default Content

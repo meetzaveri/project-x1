@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import MobileScreenComponent from '../components/mobile/Mobilescreen'
 import {connect} from 'react-redux'
-import {addResourceForMobile} from '../store/actions/mobile'
+import {postResourceRequested, fetchResourceRequested} from '../store/actions/mobile'
+import {fakeApiCall_A} from '../services/index';
 
 class MobileScreen extends Component {
   state = {
@@ -12,23 +13,39 @@ class MobileScreen extends Component {
     formTimeSlotInput: '',
     mobileType: ''
   };
+  async componentDidMount() {
+    this
+      .props
+      .fetchResource();
+  }
   onHandleCreateResourceFormAndroid = event => {
     console.log('event', event, event.target.value);
     const name = event.target.name;
     const value = event.target.value;
     this.setState({[name]: value, mobileType: 'Android'});
-  }
+  };
 
-  onCreateResourceForAndroid = event => {
-    const {formValueDevice_info, formValueStatus, formTimeSlotInput, formValueTeamName, formValueDescription} = this.state;
+  onHandleEditForAndroid = (event) => {}
+
+  onCreateResourceForAndroid = (event, cb) => {
+    const {
+      formValueDevice_info,
+      formValueStatus,
+      formTimeSlotInput,
+      formValueTeamName,
+      formValueDescription,
+      mobileType
+    } = this.state;
     const sendObj = {
       deviceInfo: formValueDevice_info,
       status: formValueStatus,
       timeSlot: formTimeSlotInput,
       teamName: formValueTeamName,
       description: formValueDescription,
-      loading: false
+      loading: false,
+      mobileType: mobileType
     }
+
     this
       .props
       .addresource(sendObj);
@@ -41,31 +58,43 @@ class MobileScreen extends Component {
   onHandleLoading = () => {
     this.setState({})
   }
+
+  onHandleEditForAndroid = () => {
+    console.log('On edit')
+  }
+
+  resetAllFormValues = () => {
+    this.setState({formValueStatus: '', formValueDescription: '', formValueDevice_info: '', formValueTeamName: '', formTimeSlotInput: ''})
+  }
   render() {
-    const {onHandleCreateResourceFormAndroid, onCreateResourceForAndroid, handleFormTimeRange} = this;
-    const resources = this.props.mobile_resources;
+    const {onHandleCreateResourceFormAndroid, onCreateResourceForAndroid, handleFormTimeRange, resetAllFormValues, onHandleEditForAndroid} = this;
+    let newAddedResource = this.props.mobile_resources;
+    console.log('newAddedResources', newAddedResource);
+    let {data, onLoading, onLoadingFormSubmit, closeModal} = this.props.fetchedResources;
+    console.log('fetchedResources', this.props.fetchedResources);
+
     const actions = {
       onHandleCreateResourceFormAndroid,
+      onHandleEditForAndroid,
       onCreateResourceForAndroid,
-      handleFormTimeRange
-    }
+      handleFormTimeRange,
+      resetAllFormValues
+    };
     return (<MobileScreenComponent
-      resources={resources}
+      resources={data}
+      onLoadingForAndroid={onLoading}
+      onLoadingFormSubmit={onLoadingFormSubmit}
+      closeModal={closeModal}
       actions={actions}
       state={this.state}/>);
   }
 }
 
-const mapStateToProps = state => ({mobile_resources: state.mobile})
+const mapStateToProps = state => ({mobile_resources: state.mobile, fetchedResources: state.res_req_mob});
 const mapDispatchToProps = dispatch => {
   return {
-    addresource: (obj) => dispatch(addResourceForMobile(obj, (success, err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('Success from dispatch', success)
-      }
-    }))
+    addresource: (obj) => dispatch(postResourceRequested({method: 'POST', data: obj})),
+    fetchResource: () => dispatch(fetchResourceRequested({method: 'GET'}))
   }
 }
 
