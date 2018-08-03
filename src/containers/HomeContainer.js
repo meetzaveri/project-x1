@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
-import {Layout, Menu, Breadcrumb, Icon} from 'antd';
+import React from 'react';
+import {Layout} from 'antd';
 import Sidebar from '../components/Sidebar';
-const {Content, Footer, Sider} = Layout;
-const SubMenu = Menu.SubMenu;
+const {Content, Footer} = Layout;
 
 class Homepage extends React.Component {
   render() {

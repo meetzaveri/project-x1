@@ -2,21 +2,33 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Provider} from 'react-redux'
 import {routes} from './routes/routes';
-import Homepage from './containers/HomeContainer';
-import MobileScreenContainer from './containers/MobileScreenContainer';
+import Loadable from 'react-loadable';
 import {createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga'
 import Rootreducer from './store/store';
 import mySaga from './sagas/sagas'
-import logo from './logo.svg';
 import './App.css';
 import 'antd/dist/antd.css';
 
-const sagaMiddleware = createSagaMiddleware()
-
+const sagaMiddleware = createSagaMiddleware();
 const store = createStore(Rootreducer, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(mySaga);
 
-sagaMiddleware.run(mySaga)
+const Loading = () => (
+  <div>
+    Loading ...
+  </div>
+);
+
+const HomePageLoader = Loadable({
+  loader: () => import ('./containers/HomeContainer'),
+  loading: Loading
+});
+
+const MobileScreenLoader = Loadable({
+  loader: () => import ('./containers/MobileScreenContainer'),
+  loading: Loading
+});
 
 class App extends Component {
   render() {
@@ -24,8 +36,8 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Switch>
-            <Route exact path={routes.index} component={Homepage}/>
-            <Route exact path={routes.resources.mobile} component={MobileScreenContainer}/>
+            <Route exact path={routes.index} component={HomePageLoader}/>
+            <Route exact path={routes.resources.mobile} component={MobileScreenLoader}/>
           </Switch>
         </Router>
       </Provider>

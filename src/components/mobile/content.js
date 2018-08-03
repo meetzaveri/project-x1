@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Card,
   Col,
@@ -7,6 +7,7 @@ import {
   Button,
   Icon
 } from 'antd';
+import EditformModal from './editmodal';
 
 const CardComponentForIphone = (props) => {
   const arr = props.resources;
@@ -55,13 +56,16 @@ const CardComponentForAndroid = (props) => {
         paddingLeft: '8px',
         paddingRight: '8px'
       }}>
+        <EditformModal {...props}/>
         <Card
           title={item.deviceInfo}
           extra={< CustomExtraContent title = {
-          item.title
+          item.mobileType
         }
         onHandleEditForAndroid = {
-          props.actions.onHandleEditForAndroid
+          (e) => props
+            .actions
+            .onHandleEditForAndroid(e, item)
         } />}
           bordered={false}>
           <Row>Status - {item.status}</Row>

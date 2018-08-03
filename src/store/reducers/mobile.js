@@ -1,18 +1,38 @@
-import {mb_action_types} from '../actions/mobile'
+import {mb_action_types as m_actions} from '../actions/mobile'
+import _ from 'lodash';
 
 export const resourcerequest_android = (state = {
   data: [],
   onLoading: false,
-  onLoadingFormSubmit: false
+  onLoadingFormSubmit: false,
+  onEditModalClose: false,
+  onModalClose: false
 }, action) => {
   switch (action.type) {
-    case mb_action_types.fetchResourceRequested:
+
+    case m_actions.toggleModal:
+      if (action.payload === 'EDIT') {
+        state = {
+          ...state,
+          onEditModalClose: !state.onEditModalClose
+        }
+      } else if (action.payload === 'CREATE') {
+        state = {
+          ...state,
+          onModalClose: !state.onModalClose
+        }
+      }
+
+      console.log(state);
+      return state;
+
+    case m_actions.fetchResourceRequested:
       state = {
         data: [],
         onLoading: true
       }
       return state;
-    case mb_action_types.fetchResourceSucceded:
+    case m_actions.fetchResourceSucceded:
 
       console.log('Action in fetch request success', action);
       let resourceArr = action.resource.data;
@@ -30,22 +50,23 @@ export const resourcerequest_android = (state = {
         return state;
       }
 
-    case mb_action_types.fetchResourceFailed:
+    case m_actions.fetchResourceFailed:
       state = {
+        ...state,
         data: [],
         onLoading: false
       }
       console.log('Action in fetch request fail', action);
       return state;
 
-    case mb_action_types.postResourceRequested:
+    case m_actions.postResourceRequested:
       state = {
         ...state,
         onLoadingFormSubmit: true
       }
       return state;
 
-    case mb_action_types.postResourceSucceded:
+    case m_actions.postResourceSucceded:
       console.log('POST REQUEST SUCCEEDED', action);
       let resourceData = action.resource.data[0];
       console.log('resourceData', resourceData);
@@ -57,19 +78,51 @@ export const resourcerequest_android = (state = {
           ],
           onLoading: false,
           onLoadingFormSubmit: false,
-          closeModal: true
+          onModalClose: false
         }
       } else {
         state = {
           ...state,
           onLoading: true,
-          onLoadingFormSubmit: false
+          onLoadingFormSubmit: false,
+          onModalClose: false
         }
       }
       return state;
 
-    case mb_action_types.postResourceFailed:
+    case m_actions.postResourceFailed:
       console.log('POST REQUEST FAILED', action);
+      state = {
+        ...state,
+        onLoading: false
+      }
+      return state;
+
+    case m_actions.putResourceRequested:
+      state = {
+        ...state,
+        onLoadingFormSubmit: true
+      }
+      return state;
+
+    case m_actions.putResourceSucceded:
+      console.log('PUT REQUEST SUCCEEDED', action);
+      let editResourceData = action.resource.data[0];
+      let id = _.findIndex(state.data, {id: editResourceData.id});
+      state.data[id] = editResourceData;
+
+      state = {
+        ...state,
+        onLoading: false,
+        onLoadingFormSubmit: false,
+        closeModal: true,
+        onEditModalClose: false
+      }
+      console.log(state);
+      return state;
+
+    case m_actions.putResourceFailed:
+      console.log('PUT REQUEST FAILED', action);
       state = {
         ...state,
         onLoading: false
@@ -89,7 +142,7 @@ export const mobile = (state = [], action) => {
   // console.log('Action ', action);
 
   switch (action.type) {
-    case mb_action_types.addresource:
+    case m_actions.addresource:
       {
         const {deviceInfo, status, timeSlot, teamName, description} = action.payload;
         console.log('SUCCESS', deviceInfo, status, timeSlot, teamName, description);

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Layout, Menu, Breadcrumb} from 'antd';
-const {Header, Content, Footer} = Layout;
+import {Layout, Menu} from 'antd';
+const {Header} = Layout;
 
 class Headercomponent extends Component {
   constructor(props) {

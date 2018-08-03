@@ -27,6 +27,18 @@ function * postResource(action) {
   }
 }
 
+function * putResource(action) {
+  try {
+    console.log('Saga in use for fetch resource')
+    const resource = yield call(fakeApiCall_A, action.payload);
+    console.log('Resource', resource)
+    yield put({type: mb_action_types.putResourceSucceded, resource: resource});
+  } catch (e) {
+    console.log('Into catch block')
+    yield put({type: mb_action_types.putResourceFailed, message: e.message});
+  }
+}
+
 /*
   Alternatively you may use takeLatest.
 
@@ -38,6 +50,7 @@ function * mySaga() {
   console.log('Calling main saga');
   yield takeLatest(mb_action_types.fetchResourceRequested, fetchResource);
   yield takeLatest(mb_action_types.postResourceRequested, postResource);
+  yield takeLatest(mb_action_types.putResourceRequested, putResource);
 }
 
 export default mySaga;

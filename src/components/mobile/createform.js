@@ -1,27 +1,17 @@
-import React, {Component} from 'react';
+import React from 'react';
 import moment from 'moment';
 import {
   Modal,
   Button,
   Form,
-  Input,
-  Tooltip,
   Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  AutoComplete,
-  DatePicker,
   TimePicker,
   Spin
 } from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-const MonthPicker = DatePicker.MonthPicker;
-const RangePicker = DatePicker.RangePicker;
+// const Option = Select.Option; const AutoCompleteOption = AutoComplete.Option;
+// const MonthPicker = DatePicker.MonthPicker; const RangePicker =
+// DatePicker.RangePicker;
 const antIcon = <Icon type="loading" style={{
   fontSize: 14
 }} spin/>;
@@ -51,11 +41,19 @@ class Createform extends React.Component {
     setTimeout(() => {
       this.setState({visible: false, confirmLoading: false});
     }, 2000);
+    this
+      .props
+      .actions
+      .onHandleCreateFormClose();
   }
 
   handleCancel = () => {
     console.log('Clicked cancel button');
     this.setState({visible: false});
+    this
+      .props
+      .actions
+      .onHandleCreateFormClose();
   }
 
   showModal = () => {
@@ -108,7 +106,7 @@ class Createform extends React.Component {
         <Modal
           footer={null}
           title="Add a resource slot"
-          visible={visible}
+          visible={this.props.createModalVisible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}>
