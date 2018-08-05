@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Switch, NavLink} from "react-router-dom";
-import {Layout, Menu, Breadcrumb, Icon} from 'antd';
+import React from 'react';
+import {NavLink} from "react-router-dom";
+import {Layout, Menu} from 'antd';
 import {routes} from '../routes/routes';
-const {Header, Content, Footer, Sider} = Layout;
+const {Sider} = Layout;
 const SubMenu = Menu.SubMenu;
 
 class SiderDemo extends React.Component {
@@ -43,14 +43,6 @@ class SiderDemo extends React.Component {
                 className="normal"
                 activeClassName="active">
                 Mobile
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="4">
-              <NavLink
-                to={routes.resources.devices}
-                className="normal"
-                activeClassName="active">
-                Devices
               </NavLink>
             </Menu.Item>
           </SubMenu>

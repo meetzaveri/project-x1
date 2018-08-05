@@ -1,26 +1,20 @@
-import React, {Component} from 'react';
+import React from 'react';
 import moment from 'moment';
 import {
   Modal,
   Button,
   Form,
-  Input,
-  Tooltip,
   Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  AutoComplete,
-  DatePicker,
-  TimePicker
+  TimePicker,
+  Spin
 } from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
-const MonthPicker = DatePicker.MonthPicker;
-const RangePicker = DatePicker.RangePicker;
+// const Option = Select.Option; const AutoCompleteOption = AutoComplete.Option;
+// const MonthPicker = DatePicker.MonthPicker; const RangePicker =
+// DatePicker.RangePicker;
+const antIcon = <Icon type="loading" style={{
+  fontSize: 14
+}} spin/>;
 
 const DropDownForAdminData = (props) => {
   const adminAccounts = ['Available', 'In use', 'Broken'];
@@ -42,20 +36,32 @@ class Createform extends React.Component {
     confirmLoading: false
   }
 
-  showModal = () => {
-    this.setState({visible: true});
-  }
-
   handleOk = () => {
     this.setState({ModalText: 'The modal will be closed after two seconds', confirmLoading: true});
     setTimeout(() => {
       this.setState({visible: false, confirmLoading: false});
     }, 2000);
+    this
+      .props
+      .actions
+      .onHandleCreateFormClose();
   }
 
   handleCancel = () => {
     console.log('Clicked cancel button');
     this.setState({visible: false});
+    this
+      .props
+      .actions
+      .onHandleCreateFormClose();
+  }
+
+  showModal = () => {
+    this.setState({visible: true});
+    this
+      .props
+      .actions
+      .resetAllFormValues();
   }
 
   onHandleTimeRange = (time, timeString) => {
@@ -69,6 +75,8 @@ class Createform extends React.Component {
   render() {
 
     const {visible, confirmLoading, ModalText} = this.state;
+    const {formValueDevice_info, formValueStatus, formValueTeamName, formValueDescription} = this.props.state;
+    const {closeModal} = this.props;
     const formItemLayout = {
       labelCol: {
         xs: {
@@ -87,6 +95,7 @@ class Createform extends React.Component {
         }
       }
     };
+
     return (
       <div
         style={{
@@ -97,7 +106,7 @@ class Createform extends React.Component {
         <Modal
           footer={null}
           title="Add a resource slot"
-          visible={visible}
+          visible={this.props.createModalVisible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}>
@@ -107,7 +116,9 @@ class Createform extends React.Component {
             this
               .props
               .actions
-              .onCreateResourceForAndroid(e);
+              .onCreateResourceForAndroid(e, () => {
+                this.handleCancel
+              });
           }}>
 
             <FormItem {...formItemLayout} label="Device info">
@@ -184,9 +195,16 @@ class Createform extends React.Component {
                   .onHandleCreateResourceFormAndroid(e);
               }}/>
             </FormItem>
-
             <button type="submit" className="btn btn-default">
-              Add
+              Add {this.props.onLoadingFormSubmit
+                ? (<Spin
+                  style={{
+                  paddingLeft: '4px'
+                }}
+                  size="small"
+                  indicator={antIcon}/>)
+                : (null)}
+
             </button>
           </form>
         </Modal>
