@@ -70,10 +70,16 @@ const CardComponentForAndroid = (props) => {
           bordered={false}>
           <Row>Status - {item.status}</Row>
           <Row>
-            TeamName - {item.teamName}
+            Team name - {item.teamName}
           </Row>
-          <Row>{item.description}</Row>
+          <Row>Description - {item.description}</Row>
           <Row>Timeslot - {item.timeSlot}
+          </Row>
+          <Row>
+            <Col span={10}>Start time - {item.startTime}</Col>
+
+            <Col span={10}>End time - {item.endTime}
+            </Col>
           </Row>
         </Card>
       </Col>

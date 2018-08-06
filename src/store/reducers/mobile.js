@@ -1,4 +1,5 @@
-import {mb_action_types as m_actions} from '../actions/mobile'
+import {mb_action_types as m_actions} from '../actions/mobile';
+import {getInitialTimeSlotObject} from '../../utils';
 import _ from 'lodash';
 
 export const resourcerequest_android = (state = {
@@ -6,7 +7,8 @@ export const resourcerequest_android = (state = {
   onLoading: false,
   onLoadingFormSubmit: false,
   onEditModalClose: false,
-  onModalClose: false
+  onModalClose: false,
+  currentTimeSlotData: []
 }, action) => {
   switch (action.type) {
 
@@ -28,7 +30,7 @@ export const resourcerequest_android = (state = {
 
     case m_actions.fetchResourceRequested:
       state = {
-        data: [],
+        ...state,
         onLoading: true
       }
       return state;
@@ -36,11 +38,17 @@ export const resourcerequest_android = (state = {
 
       console.log('Action in fetch request success', action);
       let resourceArr = action.resource.data;
+
+      let timeSlotObjForFetch = resourceArr.map((item, index) => getInitialTimeSlotObject(item.deviceInfo, item.startTime, item.endTime, item.id));
+      console.log('Timeslotobj', timeSlotObjForFetch, state);
       if (resourceArr) {
         state = {
+          ...state,
+          currentTimeSlotData: timeSlotObjForFetch,
           data: resourceArr,
           onLoading: false
         }
+
         return state;
       } else {
         state = {
@@ -69,17 +77,24 @@ export const resourcerequest_android = (state = {
     case m_actions.postResourceSucceded:
       console.log('POST REQUEST SUCCEEDED', action);
       let resourceData = action.resource.data[0];
+      let timeSlotForPostResource = getInitialTimeSlotObject(resourceData.deviceInfo, resourceData.startTime, resourceData.endTime);
       console.log('resourceData', resourceData);
       if (resourceData) {
         state = {
+          ...state,
           data: [
             ...state.data,
             resourceData
+          ],
+          currentTimeSlotData: [
+            ...state.currentTimeSlotData,
+            timeSlotForPostResource
           ],
           onLoading: false,
           onLoadingFormSubmit: false,
           onModalClose: false
         }
+
       } else {
         state = {
           ...state,
@@ -88,6 +103,7 @@ export const resourcerequest_android = (state = {
           onModalClose: false
         }
       }
+      console.log('FINAL STATE AFTER POST REQUEST SUCCESS', state);
       return state;
 
     case m_actions.postResourceFailed:

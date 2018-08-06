@@ -12,11 +12,13 @@ export const fakeApiCall_A = (params) => {
       if (params.method === 'GET') {
         data = [
           {
-            id: '1',
+            id: 'f7rcnlvcgieaul6g446o97',
             deviceInfo: 'G7',
             status: 'Available',
             timeSlot: '07:00:00',
             teamName: 'Arkham',
+            startTime: '2018-08-6 18:44',
+            endTime: '2018-08-6 19:44',
             description: 'None',
             mobileType: 'Android'
           }

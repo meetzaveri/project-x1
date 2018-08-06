@@ -16,9 +16,7 @@ class SiderDemo extends React.Component {
   }
   onChangeTab = (e) => {
     console.log('E', e)
-    this.setState({
-      defaultSelectedKeys: [e.key]
-    })
+    this.setState({defaultSelectedKeys: `${e.key}`})
   }
 
   render() {

@@ -3,6 +3,7 @@ import {Layout, Icon, Tabs} from 'antd';
 import Contentarea from './content';
 import Form from './createform'
 import Loadable from 'react-loadable';
+
 const {Content, Footer} = Layout;
 const TabPane = Tabs.TabPane;
 
@@ -25,6 +26,11 @@ const SidebarLoader = Loadable({
   loading: Loading
 });
 
+const CalendarLoader = Loadable({
+  loader: () => import ('./calendar.js'),
+  loading: Loading
+});
+
 const MobileScreen = (props) => {
   return (
     <Layout style={{
@@ -38,6 +44,10 @@ const MobileScreen = (props) => {
               <Form {...props}/>
               <Contentarea {...props} android/>
             </Content>
+            {props.onLoadingForCalendar || props.onLoadingFormSubmit
+              ? (null)
+              : (<CalendarLoader {...props}/>)}
+
           </TabPane>
           <TabPane tab={customTab_2} key="2">
             <Content>
@@ -48,6 +58,7 @@ const MobileScreen = (props) => {
           </TabPane>
 
         </Tabs>
+
         <Footer style={{
           textAlign: 'center'
         }}>
