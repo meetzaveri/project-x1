@@ -30,6 +30,11 @@ const MobileScreenLoader = Loadable({
   loading: Loading
 });
 
+const EmployeeLoader = Loadable({
+  loader: () => import ('./containers/EmployeeContainer'),
+  loading: Loading
+});
+
 class App extends Component {
   render() {
     return (
@@ -38,6 +43,7 @@ class App extends Component {
           <Switch>
             <Route exact path={routes.index} component={HomePageLoader}/>
             <Route exact path={routes.resources.mobile} component={MobileScreenLoader}/>
+            <Route exact path={routes.employees} component={EmployeeLoader}/>
           </Switch>
         </Router>
       </Provider>

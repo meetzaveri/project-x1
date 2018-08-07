@@ -6,7 +6,7 @@ class CalendarMain extends React.Component {
     super();
 
     this.options = {
-      defaultView: "day",
+      defaultView: "week",
       useCreationPopup: true,
       useDetailPopup: true,
       isReadOnly: true,

@@ -36,7 +36,11 @@ const MobileScreen = (props) => {
     <Layout style={{
       minHeight: '100vh'
     }}>
-      <SidebarLoader/>
+      <SidebarLoader
+        MenuItemKey='3'
+        onCollapsedSider={true}
+        SubMenuKeyOpen='sub1'
+        subMenuCollapsed={true}/>
       <Layout>
         <Tabs defaultActiveKey="1">
           <TabPane tab={customTab_1} key="1">

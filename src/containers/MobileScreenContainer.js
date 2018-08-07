@@ -19,6 +19,8 @@ class MobileScreen extends Component {
     editResourceFormTimeSlotInput: '',
     editResourceFormTimeSlotInputStartTime: '',
     editResourceFormTimeSlotInputEndTime: '',
+    editResourceStartTime: '',
+    editResourceEndTime: '',
     mobileType: '',
     editModalVisible: false
   };
@@ -101,7 +103,9 @@ class MobileScreen extends Component {
       editFormValueDescription,
       editFormValueStatus,
       editFormValueTeamName,
-      editResourceFormTimeSlotInput
+      editResourceFormTimeSlotInput,
+      editResourceStartTime,
+      editResourceEndTime
     } = this.state;
     const sendObj = {
       id: editFormResourceId,
@@ -110,6 +114,8 @@ class MobileScreen extends Component {
       timeSlot: editResourceFormTimeSlotInput,
       teamName: editFormValueTeamName,
       description: editFormValueDescription,
+      startTime: editResourceStartTime,
+      endTime: editResourceEndTime,
       loading: false,
       mobileType: 'Android'
     }
@@ -127,7 +133,9 @@ class MobileScreen extends Component {
       editFormValueDescription: item.description,
       editFormValueStatus: item.status,
       editFormValueTeamName: item.teamName,
-      editResourceFormTimeSlotInput: item.timeSlot
+      editResourceFormTimeSlotInput: item.timeSlot,
+      editResourceStartTime: item.startTime,
+      editResourceEndTime: item.endTime
     });
     this
       .props
