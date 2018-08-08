@@ -3,5 +3,6 @@ export const routes = {
   resources: {
     mobile: "/resources/mobile"
   },
-  employees: "/employees"
+  employees: "/employees",
+  projects: "/projects"
 };

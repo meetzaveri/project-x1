@@ -65,9 +65,7 @@ const MobileScreen = (props) => {
 
         <Footer style={{
           textAlign: 'center'
-        }}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
+        }}></Footer>
       </Layout>
     </Layout>
   );

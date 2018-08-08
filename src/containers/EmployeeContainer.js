@@ -48,9 +48,7 @@ class EmployeePage extends React.Component {
           }}><EmployeeComponent onLoading={onLoading} employeeData={data}/></Content>
           <Footer style={{
             textAlign: 'center'
-          }}>
-            Ant Design ©2018 Created by Ant UED
-          </Footer>
+          }}></Footer>
         </Layout>
       </Layout>
     );

@@ -59,10 +59,12 @@ class SiderDemo extends React.Component {
               Employees
             </NavLink>
           </Menu.Item>
-          <SubMenu key="sub2" title="Team">
-            <Menu.Item key="au239da">Team 1</Menu.Item>
-            <Menu.Item key="au239db">Team 2</Menu.Item>
-          </SubMenu>
+          <Menu.Item key="24">
+            {/* <Icon type="pie-chart"/> */}
+            <NavLink to={routes.projects} className="normal">
+              Projects
+            </NavLink>
+          </Menu.Item>
         </Menu>
       </Sider>
     );

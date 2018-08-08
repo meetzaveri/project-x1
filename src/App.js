@@ -35,6 +35,11 @@ const EmployeeLoader = Loadable({
   loading: Loading
 });
 
+const ProjectPanelLoader = Loadable({
+  loader: () => import ('./containers/ProjectsContainer'),
+  loading: Loading
+});
+
 class App extends Component {
   render() {
     return (
@@ -44,6 +49,7 @@ class App extends Component {
             <Route exact path={routes.index} component={HomePageLoader}/>
             <Route exact path={routes.resources.mobile} component={MobileScreenLoader}/>
             <Route exact path={routes.employees} component={EmployeeLoader}/>
+            <Route exact path={routes.projects} component={ProjectPanelLoader}/>
           </Switch>
         </Router>
       </Provider>
