@@ -157,7 +157,7 @@ class Editform extends React.Component {
                   {this.props.state.editResourceFormTimeSlotInput}</a>
               )
               : (<TimePicker
-                onChange={this.handleEditFormResourceTimeRange}
+                onChange={this.props.actions.handleEditFormResourceTimeRange}
                 defaultOpenValue={moment('00:00;:00', 'HH:mm:ss')}/>)}
 
           </FormItem>

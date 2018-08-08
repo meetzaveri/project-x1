@@ -1,6 +1,7 @@
 import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
-import {fakeApiCall_A} from '../services/index';
+import {fakeApiCall_A, RealApiCall} from '../services/index';
 import {mb_action_types} from '../store/actions/mobile';
+import {emp_action_types} from '../store/actions/employee';
 
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
 function * fetchResource(action) {
@@ -39,6 +40,18 @@ function * putResource(action) {
   }
 }
 
+function * fetchEmployeeData(action) {
+  try {
+    console.log('Saga in use for fetch employee')
+    const employees = yield call(RealApiCall, action.payload);
+    console.log('employees', employees)
+    yield put({type: emp_action_types.fetchUsersSucceded, emp_lists: employees});
+  } catch (e) {
+    console.log('Into catch block')
+    yield put({type: emp_action_types.fetchUsersFailed, message: e.message});
+  }
+}
+
 /*
   Alternatively you may use takeLatest.
 
@@ -51,6 +64,7 @@ function * mySaga() {
   yield takeLatest(mb_action_types.fetchResourceRequested, fetchResource);
   yield takeLatest(mb_action_types.postResourceRequested, postResource);
   yield takeLatest(mb_action_types.putResourceRequested, putResource);
+  yield takeLatest(emp_action_types.fetchUsersRequested, fetchEmployeeData);
 }
 
 export default mySaga;

@@ -6,9 +6,11 @@ import {
   Form,
   Icon,
   TimePicker,
+  DatePicker,
   Spin
 } from 'antd';
 const FormItem = Form.Item;
+const {RangePicker} = DatePicker;
 // const Option = Select.Option; const AutoCompleteOption = AutoComplete.Option;
 // const MonthPicker = DatePicker.MonthPicker; const RangePicker =
 // DatePicker.RangePicker;
@@ -28,7 +30,13 @@ const DropDownForAdminData = (props) => {
     return (accounts)
   }
 }
-
+function onChange(value, dateString) {
+  console.log('Selected Time: ', value);
+  console.log('Formatted Selected Time: ', dateString);
+}
+function onOk(value) {
+  console.log('onOk: ', value);
+}
 class Createform extends React.Component {
   state = {
     ModalText: 'Content of the modal',
@@ -64,12 +72,37 @@ class Createform extends React.Component {
       .resetAllFormValues();
   }
 
+  onChangeStartTimeAndEndTime = (value, dateString) => {
+    console.log('Selected Time: ', value);
+    console.log('Formatted Selected Time: ', dateString);
+    this
+      .props
+      .actions
+      .handleFormTimeRangeForStartTimeAndEndTime(dateString);
+  }
+
   onHandleTimeRange = (time, timeString) => {
     console.log(time, timeString);
     this
       .props
       .actions
       .handleFormTimeRange(timeString);
+  }
+
+  onHandleTimeRangeForStartTime = (time, timeString) => {
+    console.log(time, timeString);
+    this
+      .props
+      .actions
+      .handleFormTimeRangeForStartTime(timeString);
+  }
+
+  onHandleTimeRangeForEndTime = (time, timeString) => {
+    console.log(time, timeString);
+    this
+      .props
+      .actions
+      .handleFormTimeRangeForEndTime(timeString);
   }
 
   render() {
@@ -104,6 +137,7 @@ class Createform extends React.Component {
       }}>
         <Button type="primary" onClick={this.showModal}>Create a resource</Button>
         <Modal
+          width='600px'
           footer={null}
           title="Add a resource slot"
           visible={this.props.createModalVisible}
@@ -156,10 +190,23 @@ class Createform extends React.Component {
 
             </FormItem>
 
-            <FormItem {...formItemLayout} label="Allocate time">
+            <FormItem {...formItemLayout} label="Total time allocation">
               <TimePicker
                 onChange={this.onHandleTimeRange}
                 defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}/>
+            </FormItem>
+
+            <FormItem {...formItemLayout} label="Time range">
+              <div>
+                <RangePicker
+                  showTime={{
+                  format: 'HH:mm'
+                }}
+                  format="YYYY-MM-DD HH:mm"
+                  placeholder={['Start Time', 'End Time']}
+                  onChange={this.onChangeStartTimeAndEndTime}
+                  onOk={onOk}/>
+              </div>
             </FormItem>
 
             <FormItem {...formItemLayout} label="Team name">

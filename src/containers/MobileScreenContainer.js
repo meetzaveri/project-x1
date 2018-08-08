@@ -10,11 +10,17 @@ class MobileScreen extends Component {
     formValueDevice_info: '',
     formValueTeamName: '',
     formTimeSlotInput: '',
+    formTimeSlotStartTime: '',
+    formTimeSlotEndTime: '',
     editFormValueStatus: '',
     editFormValueDevice_info: '',
     editFormValueTeamName: '',
     editFormValueDescription: ' ',
     editResourceFormTimeSlotInput: '',
+    editResourceFormTimeSlotInputStartTime: '',
+    editResourceFormTimeSlotInputEndTime: '',
+    editResourceStartTime: '',
+    editResourceEndTime: '',
     mobileType: '',
     editModalVisible: false
   };
@@ -30,18 +36,34 @@ class MobileScreen extends Component {
       .toggleModal('CREATE');
   }
 
-  onHandleEditFormClose = () => {
-    this
-      .props
-      .toggleModal('EDIT');
-  }
-
   onHandleCreateResourceFormAndroid = event => {
     console.log('event', event, event.target.value);
     const name = event.target.name;
     const value = event.target.value;
     this.setState({[name]: value, mobileType: 'Android'});
   };
+
+  handleFormTimeRange = (timestring) => {
+    console.log('Timestring', timestring);
+    this.setState({formTimeSlotInput: timestring})
+  }
+
+  handleFormTimeRangeForStartTimeAndEndTime = (timestring) => {
+    console.log('Timestring for start time and end time', timestring);
+    this.setState({formTimeSlotStartTime: timestring[0]});
+    this.setState({formTimeSlotEndTime: timestring[1]})
+  }
+
+  handleFormTimeRangeForStartTime = (timestring) => {
+    console.log('Timestring', timestring);
+    this.setState({formTimeSlotStartTime: timestring})
+  }
+
+  handleFormTimeRangeForEndTime = (timestring) => {
+    console.log('Timestring', timestring);
+    this.setState({formTimeSlotEndTime: timestring})
+  }
+
   onCreateResourceForAndroid = (event) => {
     const {
       formValueDevice_info,
@@ -49,7 +71,9 @@ class MobileScreen extends Component {
       formTimeSlotInput,
       formValueTeamName,
       formValueDescription,
-      mobileType
+      mobileType,
+      formTimeSlotStartTime,
+      formTimeSlotEndTime
     } = this.state;
     const sendObj = {
       deviceInfo: formValueDevice_info,
@@ -57,6 +81,8 @@ class MobileScreen extends Component {
       timeSlot: formTimeSlotInput,
       teamName: formValueTeamName,
       description: formValueDescription,
+      startTime: formTimeSlotStartTime,
+      endTime: formTimeSlotEndTime,
       loading: false,
       mobileType: mobileType
     }
@@ -64,10 +90,6 @@ class MobileScreen extends Component {
     this
       .props
       .addresource(sendObj);
-  }
-  handleFormTimeRange = (timestring) => {
-    console.log('Timestring', timestring);
-    this.setState({formTimeSlotInput: timestring})
   }
 
   onHandleLoading = () => {
@@ -81,7 +103,9 @@ class MobileScreen extends Component {
       editFormValueDescription,
       editFormValueStatus,
       editFormValueTeamName,
-      editResourceFormTimeSlotInput
+      editResourceFormTimeSlotInput,
+      editResourceStartTime,
+      editResourceEndTime
     } = this.state;
     const sendObj = {
       id: editFormResourceId,
@@ -90,6 +114,8 @@ class MobileScreen extends Component {
       timeSlot: editResourceFormTimeSlotInput,
       teamName: editFormValueTeamName,
       description: editFormValueDescription,
+      startTime: editResourceStartTime,
+      endTime: editResourceEndTime,
       loading: false,
       mobileType: 'Android'
     }
@@ -107,13 +133,22 @@ class MobileScreen extends Component {
       editFormValueDescription: item.description,
       editFormValueStatus: item.status,
       editFormValueTeamName: item.teamName,
-      editResourceFormTimeSlotInput: item.timeSlot
+      editResourceFormTimeSlotInput: item.timeSlot,
+      editResourceStartTime: item.startTime,
+      editResourceEndTime: item.endTime
     });
     this
       .props
       .toggleModal('EDIT')
 
   }
+
+  onHandleEditFormClose = () => {
+    this
+      .props
+      .toggleModal('EDIT');
+  }
+
   onHandleeditResourceFormAndroid = (event, item) => {
     console.log('Event ', event, item)
     const name = event.target.name;
@@ -125,7 +160,7 @@ class MobileScreen extends Component {
     this.setState({editResourceFormTimeSlotInput: null})
   }
 
-  handleEditFormResourceTimeRange = (timestring) => {
+  handleEditFormResourceTimeRange = (time, timestring) => {
     console.log('Timestring', timestring);
     this.setState({editResourceFormTimeSlotInput: timestring})
   }
@@ -148,6 +183,9 @@ class MobileScreen extends Component {
       onToggleEditFormTimeSlot,
       onEditResourceForAndroid,
       onHandleEditFormClose,
+      handleFormTimeRangeForStartTime,
+      handleFormTimeRangeForEndTime,
+      handleFormTimeRangeForStartTimeAndEndTime,
       onHandleCreateFormClose
     } = this;
     const actions = {
@@ -160,6 +198,9 @@ class MobileScreen extends Component {
       handleFormTimeRange,
       resetAllFormValues,
       onEditResourceForAndroid,
+      handleFormTimeRangeForStartTime,
+      handleFormTimeRangeForEndTime,
+      handleFormTimeRangeForStartTimeAndEndTime,
       onHandleEditFormClose,
       onHandleCreateFormClose
     };
@@ -169,13 +210,16 @@ class MobileScreen extends Component {
       onEditModalClose,
       onLoadingFormSubmit,
       closeModal,
-      onModalClose
+      onModalClose,
+      currentTimeSlotData
     } = this.props.fetchedResources;
     return (<MobileScreenComponent
       resources={data}
+      giveCalendarProps={currentTimeSlotData}
       editModalVisible={onEditModalClose}
       createModalVisible={onModalClose}
       onLoadingForAndroid={onLoading}
+      onLoadingForCalendar={onLoading}
       onLoadingFormSubmit={onLoadingFormSubmit}
       closeModal={closeModal}
       actions={actions}

@@ -10,25 +10,32 @@ class SiderDemo extends React.Component {
     collapsed: false,
     defaultSelectedKeys: 'sub1'
   };
-
+  componentDidMount() {
+    console.log('menu selected item key', this.props.MenuItemKey)
+    this.setState({defaultSelectedKeys: this.props.MenuItemKey})
+  }
   onCollapse = (collapsed) => {
     this.setState({collapsed});
   }
   onChangeTab = (e) => {
-    console.log('E', e)
-    this.setState({
-      defaultSelectedKeys: [e.key]
-    })
+    console.log('E', e, this.props.MenuItemKey)
+    this.setState({defaultSelectedKeys: this.props.MenuItemKey})
   }
 
   render() {
     return (
       <Sider
+        trigger={null}
         collapsible
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}>
         <div className="logo"/>
-        <Menu theme="dark" mode="inline">
+        <Menu
+          defaultOpenKeys={this.props.SubMenuKeyOpen}
+          theme="dark"
+          mode="inline"
+          inlineCollapsed={this.props.subMenuCollapsed}
+          defaultSelectedKeys={[this.props.MenuItemKey]}>
           <Menu.Item key="1">
             {/* <Icon type="pie-chart"/> */}
             <NavLink to={routes.index} className="normal">
@@ -46,9 +53,15 @@ class SiderDemo extends React.Component {
               </NavLink>
             </Menu.Item>
           </SubMenu>
+          <Menu.Item key="23">
+            {/* <Icon type="pie-chart"/> */}
+            <NavLink to={routes.employees} className="normal">
+              Employees
+            </NavLink>
+          </Menu.Item>
           <SubMenu key="sub2" title="Team">
-            <Menu.Item key="6">Team 1</Menu.Item>
-            <Menu.Item key="8">Team 2</Menu.Item>
+            <Menu.Item key="au239da">Team 1</Menu.Item>
+            <Menu.Item key="au239db">Team 2</Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>
